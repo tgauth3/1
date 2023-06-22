@@ -1,6 +1,0 @@
-git add .
-
-git commit -m "Add JavaScript file"
-
-git push -u origin master
-
