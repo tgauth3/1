@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 设置页头文字 -->
+    <title>Smoba</title>
+    <!-- 禁止IOS设备缩放和限制原始比例 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <!-- 确定解码格式 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="https://gitee.com/tianji2/images/raw/main/js/js/vant2.css" />
+    <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+    <script src="https://gitee.com/tianji2/images/raw/main/js/js/vue2.js"></script>
+    <script src="https://gitee.com/tianji2/images/raw/main/js/js/vant2.js"></script>
+    <script>
+        var H5GG_Version; // 设置H5GG版本变量
+        var While_bool = true; // 循环判断开启
+        if (typeof $ == 'undefined') { //  判断H5GG版本是否等于空
+            while (While_bool) { // 循环开启
+                try {
+                    H5GG_Version = h5gg.require('jquery'); // 获取H5GG版本号
+                    document.write("<script src=\"https://gitee.com/tianji2/images/raw/main/js/js/jquery.js\"><\/script>"); //获取jquery文件
+                    While_bool = false; // 关闭循环
+                } catch {
+                    window.location.href = "https://i54088-1253180840.cos.ap-shanghai.myqcloud.com/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80/H5Bug.html"; // 非H5GG打开跳转非H5GG页面
+                }
+            }
+        }
+
+    </script>
+    <style>
+        /* 清空浏览器样式 */
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 除了文字,复选框,表单禁止长按,复制,选择 */
+        *:not(input, checkbox, textarea) {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* 全局大小缩放0.8 */
+        body {
+            font-family: Typeface;
+            zoom: 0.58;
+            overflow: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* 字体 */
+        @font-face {
+            font-family: 'Typeface';
+            src: url('https://gitee.com/tianji2/images/raw/main/js/AlimamaShuHeiTi-Bold.woff2') format('woff2');
+        }
+
+        /* 菜单背景样式 */
+        .Menu_Main {
+            position: fixed;
+            width: 420px;
+            height: 260px;
+            top: calc(50% - 180px);
+            left: calc(50% - 180px);
+            z-index: 999;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            overflow: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* 菜单内容 */
+        .Menu_Body {
+            overflow-y: auto;
+            padding: 0 24px 0 24px;
+        }
+    </style>
+    <script>
+        setButtonImage("https://gitee.com/tianji2/images/raw/main/js/9C0D1FAB-6C88-4ECF-B661-B64B360B0D53.png");
+        $(document).ready(function() {
+            setTimeout(() => {
+                $("#Get_Home").remove();
+            }, 100);
+        });
+
+    </script>
+</head>
+
+<body>
+    <iframe id="Get_Home" src="smoba1104466820://"></iframe>
+    <div id="app">
+        <div class="Menu_Main" ref="menuMain">
+            <div style="padding: 26px 32px;" @touchstart="Touch_Event_A" @touchmove="Touch_Event_B">
+                <van-row type="flex" justify="space-between">
+                    <van-col span="22"><span style="line-height: 26px;font-size: 26px;">摇光-SMOBA</span></van-col>
+                    <van-col span="2">
+                        <van-icon name="close" size="26px" @click="Hide_Menu">
+                    </van-col>
+                </van-row>
+                <div style="padding-top: 12px;">
+                    <hr style="border:none;margin: 2px 0;border-top:1px solid rgba(0, 0, 0, 0.2);" />
+                </div>
+            </div>
+            <div class="Menu_Body" ref="menuBody">
+                <div>
+                    <van-row type="flex" justify="space-between" style="padding-bottom: 24px;">
+                        <!-- 小地图 -->
+                        <van-col span="4">
+                            <van-button plain round type="primary" icon="minus" @click="Get_Small"></van-button>
+                        </van-col>
+                        <!-- 大地图 -->
+                        <van-col span="4">
+                            <van-button plain round type="info" icon="plus" @click="Get_Big"></van-button>
+                        </van-col>
+                        <!-- 屏幕 -->
+                        <van-col span="4">
+                            <van-button plain round type="default" icon="desktop-o" @click="Get_Screen"></van-button>
+                        </van-col>
+                        <!-- 调节 -->
+                        <van-col span="4">
+                            <van-button plain round type="warning" icon="setting" @click="Get_Adjust"></van-button>
+                        </van-col>
+                        <!-- 内存 -->
+                        <van-col span="4">
+                            <van-button plain round type="danger" icon="apps-o" @click="Get_Memory"></van-button>
+                        </van-col>
+                    </van-row>
+                </div>
+                <div>
+                    <van-row type="flex" justify="space-between" style="padding-bottom: 24px;">
+                        <van-col span="12">
+                            <!-- 绘制开关 -->
+                            <van-switch v-model="Draw_Switch" active-color="#67C23A" inactive-color="#F56C6C" size="22px" @change="Get_Draw"></van-switch>
+                            <span style="line-height: 18px;font-size: 18px;padding-left: 12px;">{{ Draw_Name }}</span>
+                        </van-col>
+                        <van-col span="12">
+                            <!-- 过直播开关 -->
+                            <van-switch v-model="Hide_Switch" active-color="#67C23A" inactive-color="#F56C6C" size="22px" @change="Get_Hide"></van-switch>
+                            <span style="line-height: 18px;font-size: 18px;padding-left: 12px;">{{ Hide_Name }}</span>
+                        </van-col>
+                    </van-row>
+                </div>
+                <div style="line-height: 18px;font-size: 18px;text-align: center;">任何英雄不可无视野大招，有效避免7天行为</div>
+
+                <van-dialog v-model="Small.menu" width="420px" title="小地图">
+                    <van-row type="flex" justify="space-between" style="padding: 22px 22px;">
+                        <van-col span="6">
+                            <van-checkbox v-model="Small.icon" shape="square">图标</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Small.blood" shape="square">血量</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Small.home" shape="square">回城</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Small.monster" shape="square">野怪</van-checkbox>
+                        </van-col>
+                    </van-row>
+                </van-dialog>
+
+                <van-dialog v-model="Big.menu" width="420px" title="大地图">
+                    <van-row type="flex" justify="space-between" style="padding: 22px 22px;">
+                        <van-col span="6">
+                            <van-checkbox v-model="Big.icon" shape="square">图标</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Big.blood" shape="square">血量</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Big.box" shape="square">方框</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Big.skill" shape="square">技能</van-checkbox>
+                        </van-col>
+                    </van-row>
+                </van-dialog>
+
+                <van-dialog v-model="Screen.menu" width="420px" title="屏幕">
+                    <van-row type="flex" justify="space-between" style="padding: 22px 22px;">
+                        <van-col span="6">
+                            <van-checkbox v-model="Screen.icon" shape="square">图标</van-checkbox>
+                        </van-col>
+                        <van-col span="6">
+                            <van-checkbox v-model="Screen.skill" shape="square">技能</van-checkbox>
+                        </van-col>
+                    </van-row>
+                </van-dialog>
+
+                <van-dialog v-model="Adjust.menu" width="420px" title="调节">
+                    <van-row type="flex" justify="space-between" style="padding: 22px 22px 22px 22px;">
+      <van-col span="6">
+        <!-- 使用 van-stepper 组件来调整地图尺寸 -->
+        <!-- v-model 指令将 Adjust 对象的 map_size 属性与 van-stepper 组件的值进行双向绑定 -->
+        <van-stepper v-model="Adjust.map_size" theme="round" button-size="22" disable-input min="80" max="500" />
+      </van-col>
+      <van-col span="6">
+        <span style="line-height: 16px;font-size: 16px;">地图尺寸</span>
+      </van-col>
+    </van-row>
+
+    <!-- 地图X轴调整 -->
+    <van-row type="flex" justify="space-between" style="padding: 0px 22px 11px 22px;">
+      <van-col span="6">
+        <!-- 使用 van-stepper 组件来调整地图X轴 -->
+        <van-stepper v-model="Adjust.map_x_size" theme="round" button-size="22" disable-input min="0" max="1000" />
+      </van-col>
+      <van-col span="6">
+        <span style="line-height: 16px;font-size: 16px;">地图左右</span>
+      </van-col>
+    </van-row>
+
+    <!-- 地图Y轴调整 -->
+    <van-row type="flex" justify="space-between" style="padding: 0px 22px 0px 22px;">
+      <van-col span="6">
+        <!-- 使用 van-stepper 组件来调整地图Y轴 -->
+        <van-stepper v-model="Adjust.map_y_size" theme="round" button-size="22" disable-input min="0" max="1000" />
+      </van-col>
+      <van-col span="6">
+        <span style="line-height: 16px;font-size: 16px;">地图上下</span>
+      </van-col>
+    </van-row>
+
+    <!-- 技能X轴调整 -->
+    <van-row type="flex" justify="space-between" style="padding: 22px 22px 0 22px;">
+      <van-col span="6">
+        <!-- 使用 van-stepper 组件来调整技能X轴 -->
+        <van-stepper v-model="Adjust.skill_x_size" theme="round" button-size="22" disable-input min="0" max="800" />
+      </van-col>
+      <van-col span="6">
+        <span style="line-height: 16px;font-size: 16px;">技能左右</span>
+      </van-col>
+    </van-row>
+
+    <!-- 技能Y轴调整 -->
+    <van-row type="flex" justify="space-between" style="padding: 11px 22px;">
+      <van-col span="6">
+        <!-- 使用 van-stepper 组件来调整技能Y轴 -->
+        <van-stepper v-model="Adjust.skill_y_size" theme="round" button-size="22" disable-input min="0" max="1000" />
+      </van-col>
+      <van-col span="6">
+        <span style="line-height: 16px;font-size: 16px;">技能上下</span>
+      </van-col>
+    </van-row>
+                </van-dialog>
+
+                <van-dialog v-model="Memory.menu" width="420px" title="内存">
+                    <van-row type="flex" justify="space-between" style="padding: 22px 22px;">
+                        <van-col span="6">
+                            <van-checkbox v-model="Memory.veiw" shape="square" @change="Get_Veiw">视距</van-checkbox>
+                        </van-col>
+                    </van-row>
+                </van-dialog>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    Draw_Switch: false,
+                    Draw_Name: "开启绘制",
+                    Hide_Switch: false,
+                    Hide_Name: "隐藏视图",
+                    Small: {
+                        menu: false,
+                        icon: true,
+                        blood: true,
+                        home: true,
+                        monster: true,
+                    },
+                    Big: {
+                        menu: false,
+                        icon: true,
+                        blood: true,
+                        box: true,
+                        skill: true,
+                    },
+                    Screen: {
+                        menu: false,
+                        icon: true,
+                        skill: true,
+                    },
+                    Adjust: {
+                        menu: false,
+                        map_size: 120,
+                        map_x_size: 34,
+                        map_y_size: 2,
+                        skill_x_size: 161,
+                        skill_y_size: 14.3,
+                    },
+                    Memory: {
+                        menu: false,
+                        veiw: false,
+                    }
+                }
+            },
+            mounted() {
+  this.Meun_Size(420, 260);
+  // 当组件挂载后，尝试从本地存储中获取之前存储的用户调整数据
+  const storedAdjust = localStorage.getItem('Adjust');
+  if (storedAdjust) {
+    // 如果有存储的数据，则将其解析为对象，并更新到 Adjust 对象中
+    this.Adjust = JSON.parse(storedAdjust);
+  }
+},
+watch: {
+  // 使用 watch 监听 Adjust 对象的变化
+  // 每当 Adjust 对象发生变化，将其内容存储到本地存储中
+  Adjust: {
+    handler: function(newVal) {
+      localStorage.setItem('Adjust', JSON.stringify(newVal));
+    },
+    deep: true, // 深度监听对象内部属性的变化
+  },
+},
+
+
+            methods: {
+                Meun_Size(Height, Width) {
+                    var Menu_Main = this.$refs.menuMain;
+                    Menu_Main.style.width = `${Height}px`;
+                    Menu_Main.style.height = `${Width}px`;
+                    Menu_Main.style.left = `calc(50% - ${Height / 2}px)`;
+                    Menu_Main.style.top = `calc(50% - ${Width / 2}px)`;
+                    var Menu_Body = this.$refs.menuBody;
+                    Menu_Body.style.height = `${Width - 30}px`;
+                },
+                Touch_Event_A(Event) {
+                    this.touchStartX = parseInt(Event.touches[0].clientX);
+                    this.touchStartY = parseInt(Event.touches[0].clientY);
+                    var Menu_Main = this.$refs.menuMain;
+                    this.menuLastX = Menu_Main.offsetLeft;
+                    this.menuLastY = Menu_Main.offsetTop;
+                },
+                Touch_Event_B(Event) {
+                    Event.preventDefault();
+                    var Touch_Distance_X = Event.touches[0].clientX - this.touchStartX;
+                    var Touch_Distance_Y = Event.touches[0].clientY - this.touchStartY;
+                    var Menu_Main = this.$refs.menuMain;
+                    Menu_Main.style.left = this.menuLastX + Touch_Distance_X + "px";
+                    Menu_Main.style.top = this.menuLastY + Touch_Distance_Y + "px";
+                },
+                Hide_Menu() {
+                    var Menu = document.querySelector("#app");
+                    Menu.style.display = 'none';
+                    setWindowTouch(false);
+                },
+                Get_Small() {
+                    this.Small.menu = true;
+                },
+                Get_Big() {
+                    this.Big.menu = true;
+                },
+                Get_Screen() {
+                    this.Screen.menu = true;
+                },
+                Get_Adjust() {
+                    this.Adjust.menu = true;
+                },
+                Get_Memory() {
+                    this.Memory.menu = true;
+                },
+                Get_Hide() {
+                    var Vied_Dylib = h5gg.loadPlugin("ayHide", "h5gg_hideview.dylib");
+                    if (!Vied_Dylib) {
+                        this.$notify("请安装H5GG过直播插件");
+                    }
+                    if (this.Hide_Switch) {
+                        setButtonImage("https://i54088-1253180840.cos.ap-shanghai.myqcloud.com/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80/%E8%BF%87%E7%9B%B4%E6%92%AD.png");
+                        View.changeHidden(0);
+                        this.Hide_Name = "恢复视图";
+                    } else {
+                        setButtonImage("https://i54088-1253180840.cos.ap-shanghai.myqcloud.com/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80/tmp_ce5e08396ebe4efac30cf2d0fce670b2.png");
+                        View.changeHidden(1);
+                        this.Hide_Name = "隐藏视图";
+                    }
+                    var orig_setWindowTouch = setWindowTouch;
+                    setWindowTouch = function(Toch) {
+                        var boolNum = Toch ? 1 : 0;
+                        View.changeTouch(boolNum);
+                        orig_setWindowTouch(Toch);
+                    }
+                },
+                Get_Veiw() {
+                    if (this.Memory.veiw) {
+                        h5gg.clearResults();
+                        h5gg.searchNumber("3.3", "F32", "0x110000000", "0x1400000000");
+                        h5gg.searchNearby("1.2", "F32", "0x80");
+                        h5gg.searchNumber("1.2", "F32", "0x110000000", "0x1400000000");
+                        var Edit_Number = h5gg.editAll("1.35", "F32");
+                        if (Edit_Number > 0) {
+                            this.$notify("修改成功");
+                        }
+                    }
+                },
+                Get_Draw() {
+                    if (this.Draw_Switch) {
+                        this.Draw_Name = "关闭绘制";
+                    } else {
+                        this.Draw_Name = "开启绘制";
+                    }
+                }
+            }
+        });
+
+        document.body.addEventListener('touchstart', function() {});
+        setWindowDrag(0, 0, 0, 0);
+        var IOS_Pixel_Scale = window.devicePixelRatio;
+        var IOS_Width = 0;
+        var IOS_Height = 0;
+        var Canvas = document.createElement("canvas");
+        document.body.appendChild(Canvas);
+        Canvas.style.height = "100%";
+        Canvas.style.width = "100%";
+        var Control_Screen_Rotate = function() {
+            if (window.lastorientation == window.orientation) return;
+            window.lastorientation = window.orientation;
+            if (Math.abs(window.orientation) == 90) {
+                setWindowRect(0, 0, window.screen.height, window.screen.width);
+                Canvas.width = window.screen.height * IOS_Pixel_Scale;
+                Canvas.height = window.screen.width * IOS_Pixel_Scale;
+                IOS_Width = window.screen.height;
+                IOS_Height = window.screen.width;
+            } else {
+                setWindowRect(0, 0, window.screen.width, window.screen.height);
+                Canvas.height = window.screen.height * IOS_Pixel_Scale;
+                Canvas.width = window.screen.width * IOS_Pixel_Scale;
+                IOS_Width = window.screen.width;
+                IOS_Height = window.screen.height;
+            }
+        }
+        Control_Screen_Rotate();
+        window.addEventListener("orientationchange", Control_Screen_Rotate, false);
+        setButtonAction(function() {
+            var Menu = document.querySelector("#app");
+            if (Menu.style.display == 'none') {
+                Menu.style.display = 'block';
+                setWindowTouch(true);
+            } else {
+                Menu.style.display = 'none';
+                setWindowTouch(false);
+            }
+        });
+        var D2DBrush = Canvas.getContext('2d');
+
+        function LockPID() {
+            if (!h5gg.getProcList("smoba")[0]) {
+                LockPID();
+            } else {
+                var Game_PID_Name = h5gg.getProcList("smoba")[0].pid;
+                h5gg.setTargetProc(Game_PID_Name);
+                h5gg.clearResults();
+            }
+        }
+        LockPID();
+        var Module = Number(h5gg.getRangesList('smoba')[0].start); // 获取模块地址
+        var Monster_D2D = [{
+                X: -23000, //蓝方 蓝BUFF
+                Y: 300,
+            },
+            {
+                X: -30000, //蓝方 狼
+                Y: -10000,
+            },
+            {
+                X: -36000, //蓝方 蜥蜴
+                Y: 5000,
+            },
+            {
+                X: -32000, //蓝方 穿山甲
+                Y: 20000,
+            },
+            {
+                X: 2500, //蓝方 红BUFF
+                Y: -30000,
+            },
+            {
+                X: -3000, //蓝方 猪 
+                Y: -20000,
+            },
+            {
+                X: 15000, //蓝方 鸟
+                Y: -35000,
+            },
+            {
+                X: 23000, //红方 蓝BUFF
+                Y: -300,
+            },
+            {
+                X: 30000, //红方 狼
+                Y: 10000,
+            },
+            {
+                X: 36000, //红方 蜥蜴
+                Y: -5000,
+            },
+            {
+                X: 32000, //红方 穿山甲
+                Y: -20000,
+            },
+            {
+                X: -2500, //红方 红BUFF
+                Y: 30000,
+            },
+            {
+                X: 3000, //红方 猪 
+                Y: 20000,
+            },
+            {
+                X: -15000, //红方 鸟 
+                Y: 35000,
+            },
+            {
+                X: 16690, //暴君 
+                Y: -22100,
+            },
+            {
+                X: -16690, //主宰
+                Y: 22100,
+            },
+        ];
+
+        function Draw_Main() {
+            Clear_D2DBrush(); // 清空画布
+            var GWorld = ReadI64(Module + 0xC8175C0); // 获取真实Gorld
+            if (IsNull(GWorld)) return; // 获取Gworld失败返回
+            var Level = ReadI64(GWorld + 0x378); // 类
+            if (Level < GWorld) return; // 条件不符合返回
+            var Actor_Array = ReadI64(Level + 0x60); // 数组
+            var Actor_Count = ReadI32(Level + 0x7C); // 数量
+            
+            if (Actor_Count != 0) {
+            var View_Matrix = []; // 视角矩阵
+                var Matrix_A = ReadI64(Module + 0xCB250C0);
+                if (IsNull(Matrix_A)) return;
+                var Matrix_B = ReadI64(Matrix_A + 0x48);
+                if (IsNull(Matrix_B)) return;
+                var Matrix_C = ReadI64(Matrix_B + 0x48);
+                if (IsNull(Matrix_C)) return;
+                var Matrix_D = ReadI64(Matrix_C + 0xA0);
+                if (IsNull(Matrix_D)) return;
+                var Matrix_E = ReadI64(Matrix_D + 0x10);
+                if (IsNull(Matrix_E)) return;
+                var Matrix_F = ReadI64(Matrix_E + 0x50);
+                if (IsNull(Matrix_F)) return;
+                var Matrix = ReadI64(Matrix_F + 0x10);
+                if (IsNull(Matrix)) return; //矩阵
+                
+                    for (var t = 0; t < 16; t++) {
+                        var Actor_Matrix = ReadF32(Matrix + 0x2C8 + t * 0x4);
+                        View_Matrix.push(Actor_Matrix);
+                    
+                }
+                var MyTeam = View_Matrix[0] > 0 ? 1 : 2; //矩阵判断自己坐标
+                var CampTeam = MyTeam === 1 ? 1 : -1; //地图阵营判断
+
+                var Screen_Number = 0;
+                var Screen_Array = [1, 3.35, 5.7, 8.05, 10.4, 12.75];
+
+                for (var i = 0; i < Actor_Count; i++) {
+                    var Actor = ReadI64(Actor_Array + i * 0x18); //人物
+                    var TeamID = ReadI32(Actor + 0x34); //队标
+                    if (TeamID == MyTeam) continue; //判断是本人队伍就跳过
+                    var PlayID = ReadI64(Actor + 0x28); // 玩家ID 
+                    var Health = ReadI32(ReadI64(Actor + 0x148) + 0xA0); // 当前血量
+                    var HealthMax = ReadI32(ReadI64(Actor + 0x148) + 0xA8); // 血量上限
+                    var HP = 100 * Health / HealthMax;
+                    var Screen_X = (Screen_Array[Screen_Number] * app.Adjust.map_size * 0.085);
+                    Screen_Number++;
+                    var Actor_D2D = Get_World_D2D(Actor); // 视角坐标
+                    var Monster_Array = ReadI64(ReadI64(ReadI64(ReadI64(GWorld) + 0x3A8) + 0x88) + 0x120); //野怪数组
+                    var Monster_Number = [0x0, 0xF0, 0x108, 0x120, 0x18, 0x138, 0x150, 0x30, 0x168, 0x180, 0x198, 0x48, 0x1B0, 0x1C8]; // 野怪数量
+                    var Skill_A_Time = Math.floor(ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0xD8) + 0xA0) + 0x38) / 8192000); //第一技能
+                    var Skill_B_Time = Math.floor(ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0xF0) + 0xA0) + 0x38) / 8192000); //第二技能
+                    var Skill_C_Time = Math.floor(ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0x108) + 0xA0) + 0x38) / 8192000); //第三技能
+                    var Skill_D_Time = Math.floor(ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0x120) + 0xA0) + 0x38) / 8192000); //第四技能
+                    var Passive_Time = Math.floor(ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0x150) + 0xA0) + 0x38) / 8192000); //被动技能
+                    var Passive_ID = ReadI32(ReadI64(ReadI64(Actor + 0x130) + 0x150) + 0x330); // 被动技能ID
+                    if (Passive_ID > 80122 || Passive_ID < 80000) Passive_ID = 80104; // 判断惩戒预防消失
+
+                    var Get_Home = ReadI32(ReadI64(ReadI64(ReadI64(Actor + 0x130) + 0x168) + 0x110) + 0x20); // 回城
+                    var Small_Map_D2D = Get_SmallMap_D2D(Actor_D2D.X, Actor_D2D.Y, CampTeam); // 小地图坐标
+                    var Big_Map_D3D = Get_BigMap_D3D(View_Matrix, Actor_D2D); // 大地图坐标
+                    var Actor_Data = {
+                        PlayID,
+                        HP,
+                        Skill_C_Time,
+                        Passive_Time,
+                        Passive_ID,
+                        Get_Home,
+                        Small_Map_D2D,
+                        Big_Map_D3D,
+                        Screen_X
+                    };
+
+                    Draw_Draw(Actor_Data);
+                }
+
+
+                if (app.Small.monster && Actor_Count == 10) {
+
+                    if (Monster_Array > 0) {
+                        for (var r = 0; r < Monster_Number.length; r++) {
+                            var Monster = ReadI64(Monster_Array + Monster_Number[r]); // 野怪
+                            var Monster_Health = ReadI32(Monster + 0x238) / 1000 + 3; // 野怪当前血量
+                            var Monster_HealthMax = ReadI32(Monster + 0x1E4) / 1000 + 3; // 野怪血量上限
+                            var Monster_Map_D2D = Get_SmallMap_D2D(Monster_D2D[r].X, Monster_D2D[r].Y, CampTeam); // 小地图坐标
+                            if (Monster_Health === Monster_HealthMax) {
+                                Draw_Circular(Monster_Map_D2D.X, Monster_Map_D2D.Y, 100, app.Adjust.map_size * 0.02, "#E6A23C", 1, 1);
+                            } else {
+                                Draw_Text(Math.ceil(Monster_Health), Monster_Map_D2D.X, Monster_Map_D2D.Y + app.Adjust.map_size * 0.025, app.Adjust.map_size * 0.16, "center", '#323233', 1, 1, false);
+                                Draw_Text(Math.ceil(Monster_Health), Monster_Map_D2D.X, Monster_Map_D2D.Y + app.Adjust.map_size * 0.025, app.Adjust.map_size * 0.16, "center", '#F2F2F2', 2, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function Draw_Draw(Data) {
+            Draw_Rectangle(app.Adjust.map_x_size, app.Adjust.map_y_size, app.Adjust.map_size, app.Adjust.map_size, "#FF6666", 0.2, 1, false); // 小地图方框
+
+
+            var Icon_Actor_White = new Image();
+            Icon_Actor_White.src = "https://i54088-1253180840.cos.ap-shanghai.myqcloud.com/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80/GameData/Smoba/Game_Picture/" + Data.PlayID + "/" + Data.PlayID + ".png";
+
+            if (app.Screen.icon) {
+
+
+                Draw_Image(Icon_Actor_White, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.08, app.Adjust.skill_y_size - app.Adjust.map_size * 0.08, app.Adjust.map_size * 0.166, app.Adjust.map_size * 0.165, 1);
+
+                Icon_Actor_BK = new Image();
+                Icon_Actor_BK.src = "https://gitee.com/tianji2/images/raw/main/5F56509D.png";
+                Draw_Image(Icon_Actor_BK, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.091, app.Adjust.skill_y_size - app.Adjust.map_size * 0.0977, app.Adjust.map_size * 0.187, app.Adjust.map_size * 0.186, 1);
+
+                Draw_Rectangle(app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.0855, app.Adjust.skill_y_size + app.Adjust.map_size * 0.065, app.Adjust.map_size * 0.17, app.Adjust.map_size * 0.0245, "#000", 2.2, true);
+
+                Draw_Rectangle(app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.0825, app.Adjust.skill_y_size + app.Adjust.map_size * 0.069, app.Adjust.map_size * 0.00164 * Data.HP, app.Adjust.map_size * 0.016, "#d61f1f", 2.2, true);
+
+                if (Data.HP == 0) {
+
+                    var Icon_Actor_JS = new Image();
+                    Icon_Actor_JS.src = "https://gitee.com/tianji2/images/raw/main/js/21586457-7CF8-4FBE-824C-70F413E59BCB.png";
+
+                    Draw_Image(Icon_Actor_JS, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.091, app.Adjust.skill_y_size - app.Adjust.map_size * 0.0977, app.Adjust.map_size * 0.187, app.Adjust.map_size * 0.186, 1);
+                }
+
+                //Draw_Rectangle(app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.0855, app.Adjust.skill_y_size + app.Adjust.map_size * 0.065, app.Adjust.map_size * 0.17, app.Adjust.map_size * 0.025, "#000", 2.2, true);
+
+
+                if (Data.Skill_C_Time == 0) {
+                    Icon_Skill_C_DZ = new Image();
+                    Icon_Skill_C_DZ.src = "https://gitee.com/tianji2/images/raw/main/39913C1E-D195-435D-AD76-8C8FB0CE87F6.png";
+                    Draw_Image(Icon_Skill_C_DZ, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.0337, app.Adjust.skill_y_size - app.Adjust.map_size * 0.102, app.Adjust.map_size * 0.078, app.Adjust.map_size * 0.068, 1);
+                }
+            }
+
+
+            if (app.Screen.skill) {
+Icon_Passive_White = new Image();
+                Icon_Passive_White.src = "https://gitee.com/tianji2/images/raw/main/" + Data.Passive_ID + ".PNG";
+
+Draw_Image(Icon_Passive_White, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.085, app.Adjust.skill_y_size - app.Adjust.map_size * 0.09 + app.Adjust.map_size * 0.17 + app.Adjust.map_size * 0.05, app.Adjust.map_size * 0.17, app.Adjust.map_size * 0.17, 1);
+
+                if (Data.Passive_Time > 0) {
+
+                    Icon_Passive_Back = new Image();
+                    Icon_Passive_Back.src = "https://gitee.com/tianji2/images/raw/main/js/60B60F67-EA80-4E56-B5CF-DA4C853EDC9E.png";
+
+                    Draw_Image(Icon_Passive_Back, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X - app.Adjust.map_size * 0.085, app.Adjust.skill_y_size - app.Adjust.map_size * 0.09 + app.Adjust.map_size * 0.17 + app.Adjust.map_size * 0.05, app.Adjust.map_size * 0.17, app.Adjust.map_size * 0.17, 1);
+                    //Draw_Text(Data.Passive_Time, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X, app.Adjust.skill_y_size + app.Adjust.map_size * 0.215 + app.Adjust.map_size * 0.072, app.Adjust.map_size * 0.23, "center", '#323233', 1, 1, false);
+                    Draw_Text(Data.Passive_Time, app.Adjust.skill_x_size + app.Adjust.map_size + Data.Screen_X, app.Adjust.skill_y_size + app.Adjust.map_size * 0.215 + app.Adjust.map_size * 0.072, app.Adjust.map_size * 0.23, "center", '#F2F2F2', 2, 1);
+                }
+            }
+            if (Data.HP > 0) {
+                // 小地图
+                if (app.Small.icon) {
+
+                    Draw_Image(Icon_Actor_White, Data.Small_Map_D2D.X - app.Adjust.map_size * 0.058, Data.Small_Map_D2D.Y - app.Adjust.map_size * 0.058, app.Adjust.map_size * 0.12, app.Adjust.map_size * 0.12, 1);
+                }
+                if (app.Small.blood) {
+                    Draw_Circular(Data.Small_Map_D2D.X, Data.Small_Map_D2D.Y, 100, app.Adjust.map_size * 0.0626, "#fff", app.Adjust.map_size * 0.036, 1, false);
+                    Draw_Circular(Data.Small_Map_D2D.X, Data.Small_Map_D2D.Y, Data.HP, app.Adjust.map_size * 0.063, "#d61f1f", app.Adjust.map_size * 0.046, 1, false);
+
+                    Draw_Circular(Data.Small_Map_D2D.X, Data.Small_Map_D2D.Y, Data.HP, app.Adjust.map_size * 0.0555, "#323233", app.Adjust.map_size * 0.012, 1, false);
+                }
+                if (app.Small.home && Data.Get_Home) {
+                    //Draw_Text("回城", Data.Small_Map_D2D.X, Data.Small_Map_D2D.Y + app.Adjust.map_size * 0.117, app.Adjust.map_size * 0.18, "center", '#323233', 1, 1, false);
+                    //Draw_Text("回城", Data.Small_Map_D2D.X, Data.Small_Map_D2D.Y + app.Adjust.map_size * 0.118, app.Adjust.map_size * 0.17, "center", '#FFF', 2, 1);
+
+                    Icon_Passive_HC = new Image();
+                    Icon_Passive_HC.src = "https://gitee.com/tianji2/images/raw/main/js/9211CA17-5211-4EA7-9EA5-C3B06FDD1E14.png";
+
+                    Draw_Image(Icon_Passive_HC, Data.Small_Map_D2D.X - app.Adjust.map_size * 0.09, Data.Small_Map_D2D.Y - app.Adjust.map_size * 0.0945, app.Adjust.map_size * 0.183, app.Adjust.map_size * 0.183, 1);
+                }
+                // 大地图
+                if (Data.Big_Map_D3D.X > 0 && Data.Big_Map_D3D.X < IOS_Width && Data.Big_Map_D3D.Y > 0 && Data.Big_Map_D3D.Y < IOS_Height) {
+                    if (app.Big.icon) {
+                        Draw_Image(Icon_Actor_White, Data.Big_Map_D3D.X - app.Adjust.map_size * 0.058, Data.Big_Map_D3D.Y - app.Adjust.map_size * 0.058, app.Adjust.map_size * 0.12, app.Adjust.map_size * 0.12, 1);
+                    }
+                    if (app.Big.blood) {
+                        Draw_Circular(Data.Big_Map_D3D.X, Data.Big_Map_D3D.Y, 100, app.Adjust.map_size * 0.0626, "#fff", app.Adjust.map_size * 0.036, 1, false);
+                        Draw_Circular(Data.Big_Map_D3D.X, Data.Big_Map_D3D.Y, Data.HP, app.Adjust.map_size * 0.063, "#d61f1f", app.Adjust.map_size * 0.046, 1, false);
+
+                        Draw_Circular(Data.Big_Map_D3D.X, Data.Big_Map_D3D.Y, Data.HP, app.Adjust.map_size * 0.0555, "#323233", app.Adjust.map_size * 0.012, 1, false);
+                    }
+                    if (app.Big.box) {
+                        Draw_Quadrangle_Rectangle(Data.Big_Map_D3D.X - Data.Big_Map_D3D.W / 2, Data.Big_Map_D3D.Y - Data.Big_Map_D3D.W * 1.5 / 2, Data.Big_Map_D3D.W, Data.Big_Map_D3D.W * 1.5, "lime", 3, 2);
+                    }
+                    if (app.Big.skill) {
+                        Draw_Text("大招:",
+                            Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * -0.2, app.Adjust.map_size * 0.23, "center", '#fff', 2, 1);
+
+                        Draw_Text("召唤:",
+                            Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * 0.34, app.Adjust.map_size * 0.23, "center", '#fff', 2, 1);
+
+                        {
+                            if (Data.Passive_Time == 0) {
+                                Draw_Text("●", Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1.55, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * 0.417, app.Adjust.map_size * 0.5, "center", 'lime', 2, 1);
+                            } else {
+                                Draw_Text(Data.Passive_Time, Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1.57, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * 0.35, app.Adjust.map_size * 0.24, "center", '#fff', 2, 1);
+                            }
+                        }
+                        if (Data.Skill_C_Time == 0) {
+                            Draw_Text("●", Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1.55, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * -0.123, app.Adjust.map_size * 0.5, "center", 'lime', 2, 1);
+                        } else {
+
+                            Draw_Text(Data.Skill_C_Time, Data.Big_Map_D3D.X + Data.Big_Map_D3D.W * 1.57, Data.Big_Map_D3D.Y + Data.Big_Map_D3D.W * -0.19, app.Adjust.map_size * 0.24, "center", '#fff', 2, 1);
+                        }
+                    }
+                }
+            }
+        }
+function IsNull(Addr) {
+     return (Addr < 0x100000000 || Addr > 0x300000000);
+}
+
+
+        function Draw_Image(Image, X, Y, W, H, Pellucidity) {
+            X *= IOS_Pixel_Scale;
+            Y *= IOS_Pixel_Scale;
+            W *= IOS_Pixel_Scale;
+            H *= IOS_Pixel_Scale;
+            D2DBrush.globalAlpha = Pellucidity;
+            D2DBrush.drawImage(Image, X, Y, W, H);
+        }
+
+        function Draw_Text(Text, X, Y, Size, Position, Color, Line, Pellucidity, IsFill = true) {
+            X *= IOS_Pixel_Scale;
+            Y *= IOS_Pixel_Scale;
+            D2DBrush.beginPath();
+            D2DBrush.textAlign = Position;
+            D2DBrush.lineWidth = Line;
+            D2DBrush.globalAlpha = Pellucidity;
+            D2DBrush.font = `${Size}px Typeface`;
+            if (IsFill) {
+                D2DBrush.fillStyle = Color;
+                D2DBrush.fillText(Text, X, Y);
+            } else {
+                D2DBrush.strokeStyle = Color;
+                D2DBrush.strokeText(Text, X, Y);
+            }
+            D2DBrush.closePath();
+        };
+
+        function Draw_Line(X1, Y1, X2, Y2, Color, Line, Pellucidity) {
+            X1 *= IOS_Pixel_Scale;
+            Y1 *= IOS_Pixel_Scale;
+            X2 *= IOS_Pixel_Scale;
+            Y2 *= IOS_Pixel_Scale;
+            D2DBrush.lineWidth = Line;
+            D2DBrush.strokeStyle = Color;
+            D2DBrush.globalAlpha = Pellucidity;
+            D2DBrush.beginPath();
+            D2DBrush.moveTo(X1, Y1);
+            D2DBrush.lineTo(X2, Y2);
+            D2DBrush.stroke();
+            D2DBrush.closePath();
+        }
+
+        function Draw_Circular(X, Y, Scale, R, Color, Line, Pellucidity, IsFill = true) {
+            X *= IOS_Pixel_Scale;
+            Y *= IOS_Pixel_Scale;
+            R *= IOS_Pixel_Scale;
+            if (Scale === 100) Scale = 1;
+            else if (Scale > 0) Scale = 1 - Scale / 100;
+            var RotationAngle = Rotation => Rotation * Math.PI / 180;
+            D2DBrush.beginPath();
+            D2DBrush.lineWidth = Line;
+            D2DBrush.globalAlpha = Pellucidity;
+            D2DBrush.arc(X, Y, R, RotationAngle(Scale * 360 - 90), RotationAngle(-90), false);
+            if (IsFill) {
+                D2DBrush.fillStyle = Color;
+                D2DBrush.fill();
+            } else {
+                D2DBrush.strokeStyle = Color;
+                D2DBrush.stroke();
+            }
+            D2DBrush.closePath();
+        }
+
+        function Draw_Rectangle(X, Y, W, H, Color, Line, Pellucidity, IsFill = true) {
+            X *= IOS_Pixel_Scale;
+            Y *= IOS_Pixel_Scale;
+            W *= IOS_Pixel_Scale;
+            H *= IOS_Pixel_Scale;
+            D2DBrush.lineWidth = Line;
+            D2DBrush.globalAlpha = Pellucidity;
+            if (IsFill) {
+                D2DBrush.fillStyle = Color;
+                D2DBrush.fillRect(X, Y, W, H);
+            } else {
+                D2DBrush.strokeStyle = Color;
+                D2DBrush.strokeRect(X, Y, W, H);
+            }
+            D2DBrush.closePath();
+        }
+
+        function Draw_Quadrangle_Rectangle(X, Y, W, H, Color, Line, Pellucidity) {
+            X *= IOS_Pixel_Scale;
+            Y *= IOS_Pixel_Scale;
+            W *= IOS_Pixel_Scale;
+            H *= IOS_Pixel_Scale;
+
+            D2DBrush.lineWidth = Line;
+            D2DBrush.globalAlpha = Pellucidity;
+            D2DBrush.strokeStyle = Color;
+
+            D2DBrush.beginPath();
+            D2DBrush.moveTo(X + W / 6, Y);
+
+            D2DBrush.lineTo(X + W - W / 6, Y);
+            D2DBrush.quadraticCurveTo(X + W, Y, X + W, Y + H / 9);
+
+            D2DBrush.lineTo(X + W, Y + H - H / 9);
+            D2DBrush.quadraticCurveTo(X + W, Y + H, X + W - W / 6, Y + H);
+
+            D2DBrush.lineTo(X + W / 6, Y + H);
+            D2DBrush.quadraticCurveTo(X, Y + H, X, Y + H - H / 9);
+
+            D2DBrush.lineTo(X, Y + H / 9);
+            D2DBrush.quadraticCurveTo(X, Y, X + W / 6, Y);
+
+            D2DBrush.closePath();
+            D2DBrush.stroke();
+        }
+
+        function Get_World_D2D(Data) {
+            return {
+                X: ReadI32(ReadI64(ReadI64(ReadI64(ReadI64(Data + 0x1F0) + 0x10) + 0x0) + 0x10) + 0x0),
+                Y: ReadI32(ReadI64(ReadI64(ReadI64(ReadI64(Data + 0x1F0) + 0x10) + 0x0) + 0x10) + 0x8),
+            }
+        }
+
+        function Get_SmallMap_D2D(X, Y, CampTeam) {
+            return {
+                X: X * CampTeam / 100000 * app.Adjust.map_size + app.Adjust.map_x_size + app.Adjust.map_size * 0.5,
+                Y: Y * CampTeam / 100000 * app.Adjust.map_size * -1 + app.Adjust.map_y_size + app.Adjust.map_size * 0.5,
+            };
+        }
+
+        function Get_BigMap_D3D(View_Matrix, D2D) {
+            var View = View_Matrix[2] * (D2D.X / 1000) + View_Matrix[10] * (D2D.Y / 1000) + View_Matrix[14];
+            View = 1 / View;
+            return {
+                X: (1 + (View_Matrix[0] * (D2D.X / 1000) + View_Matrix[4] * 1 + View_Matrix[8] * (D2D.Y / 1000) + View_Matrix[12]) * View) * IOS_Width / 2,
+                Y: (1 - (View_Matrix[1] * (D2D.X / 1000) + View_Matrix[5] * 1 + View_Matrix[9] * (D2D.Y / 1000) + View_Matrix[13]) * View) * IOS_Height / 2,
+                W: ((1 - (View_Matrix[1] * (D2D.X / 1000) + View_Matrix[5] * 1 + View_Matrix[9] * (D2D.Y / 1000) + View_Matrix[13]) * View) * IOS_Height / 2 - (1 - (View_Matrix[1] * (D2D.X / 1000) + View_Matrix[5] * 4 + View_Matrix[9] * (D2D.Y / 1000) + View_Matrix[13]) * View) * IOS_Height / 2) / 2,
+            }
+        }
+
+        function ReadI32(Addr) {
+    if (Addr < 0x100000000 || Addr > 0x300000000) {
+        // 如果地址无效，返回一个错误码或者空值
+        return 0;
+    }
+    // 其他情况，进行读取操作
+    return Number(h5gg.getValue(Addr, "I32"));
+}
+
+
+        function ReadI64(Addr) {
+    if (Addr < 0x100000000 || Addr > 0x300000000) {
+        // 如果地址无效，返回一个错误码或者空值
+        return 0;
+    }
+    // 其他情况，进行读取操作
+    return Number(h5gg.getValue(Addr, "I64"));
+}
+
+
+        function ReadF32(Addr) {
+    if (Addr < 0x100000000 || Addr > 0x300000000) {
+        // 如果地址无效，返回一个错误码或者空值
+        return 0.0;
+    }
+    // 其他情况，进行读取操作
+    return Number(h5gg.getValue(Addr, "F32"));
+}
+
+
+        function ReadU8(Addr) {
+    if (Addr < 0x100000000 || Addr > 0x300000000) {
+        // 如果地址无效，返回一个错误码或者空值
+        return 0;
+    }
+    // 其他情况，进行读取操作
+    return Number(h5gg.getValue(Addr, "U8"));
+}
+
+
+        function WriteU32(Addr, Value) {
+            h5gg.setValue(Addr, Value, "U32");
+        }
+
+        function Clear_D2DBrush() {
+    // 检查Canvas对象是否存在
+    if (!Canvas) {
+        return; // 如果Canvas对象不存在，跳过清理画布操作
+    }
+
+    // 检查Canvas对象的width和height属性是否存在
+    if (!Canvas.width || !Canvas.height) {
+        return; // 如果width或height属性不存在，跳过清理画布操作
+    }
+
+    // 检查D2DBrush对象是否存在
+    if (!D2DBrush) {
+        return; // 如果D2DBrush对象不存在，跳过清理画布操作
+    }
+
+    // 执行清理画布操作
+    D2DBrush.clearRect(0, 0, Canvas.width, Canvas.height);
+}
+
+        setInterval(function() {
+            if (app.Draw_Switch) Draw_Main();
+            else Clear_D2DBrush();
+        }, 22);
+    </script>
+</body>
+
+</html>
